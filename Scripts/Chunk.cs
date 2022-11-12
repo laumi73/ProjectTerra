@@ -3,6 +3,20 @@ using System;
 
 public class Chunk : StaticBody
 {
+    private SurfaceTool surfaceTool = new SurfaceTool();
+    private Mesh mesh = null;
+    private MeshInstance meshInstance = null;
+
+    public void updateMesh() {
+        //Unload mesh if there's an existing one
+        if (this.meshInstance != null) {
+            this.meshInstance.CallDeferred("queue_free");
+            this.meshInstance = null;
+        }
+
+        
+    }
+
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
