@@ -11,6 +11,7 @@ config_version=4
 [application]
 
 config/name="VoxelTerrainProject"
+run/main_scene="res://scenes/Overworld.tscn"
 config/icon="res://icon.png"
 
 [physics]

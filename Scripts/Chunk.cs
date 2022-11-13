@@ -28,7 +28,7 @@ public class Chunk : StaticBody
         this.meshInstance.Mesh = this.mesh;
 
         AddChild(meshInstance);
-        this.meshInstance.CreateTrimeshCollision();
+        //this.meshInstance.CreateTrimeshCollision();
 
         //Loop through each block position inside a chunk and draw the blocks
         void drawBlocks()
