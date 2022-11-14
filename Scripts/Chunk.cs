@@ -4,7 +4,7 @@ using System;
 public class Chunk : StaticBody
 {
     private SurfaceTool surfaceTool = new SurfaceTool();
-    private Mesh mesh = null;
+    private ArrayMesh mesh = null;
     private MeshInstance meshInstance = null;
 
     public void updateMesh()
@@ -23,12 +23,12 @@ public class Chunk : StaticBody
         this.surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
         drawBlocks();
 
-        this.surfaceTool.GenerateNormals();
-        this.surfaceTool.Commit();
+        this.surfaceTool.GenerateNormals(false);
+        this.surfaceTool.Commit(this.mesh);
         this.meshInstance.Mesh = this.mesh;
-
-        AddChild(meshInstance);
-        //this.meshInstance.CreateTrimeshCollision();
+        
+        AddChild(meshInstance, false);
+        this.meshInstance.CreateTrimeshCollision();
 
         //Loop through each block position inside a chunk and draw the blocks
         void drawBlocks()
