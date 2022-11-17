@@ -5,7 +5,7 @@ public static class VoxelData {
         new Vector3(0f, 0f, 0f), //0
         new Vector3(1f, 0f, 0f), //1
         new Vector3(1f, 1f, 0f), //2
-        new Vector3(0f, 0f, 1f), //3
+        new Vector3(0f, 1f, 0f), //3
         new Vector3(0f, 0f, 1f), //4
         new Vector3(1f, 0f, 1f), //5
         new Vector3(1f, 1f, 1f), //6
@@ -13,11 +13,11 @@ public static class VoxelData {
     };
 
     public static readonly int[,] voxelTriangles = new int[6, 4] {
-        {3, 7, 2, 6}, //Top
-        {5, 6, 4, 7}, //Bottom
-        {4, 7, 0, 3}, //Left
-        {1, 2, 5, 6}, //Right
-        {5, 6, 4, 7}, //Front
-        {0, 3, 1, 2}  //Back
+        {6, 7, 2, 3}, //Top
+        {7, 6, 4, 5}, //Bottom
+        {3, 7, 0, 4}, //Left
+        {6, 2, 5, 1}, //Right
+        {7, 6, 4, 5}, //Front
+        {2, 3, 1, 0}  //Back
     };
 }
