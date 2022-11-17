@@ -55,7 +55,7 @@ public class Chunk : StaticBody
                 Vector3 vertexC = VoxelData.voxelVertices[VoxelData.voxelTriangles[i, 2]] + offset;
                 Vector3 vertexD = VoxelData.voxelVertices[VoxelData.voxelTriangles[i, 3]] + offset;
                 this.surfaceTool.AddTriangleFan(new Vector3[] {vertexA, vertexB, vertexC});
-                this.surfaceTool.AddTriangleFan(new Vector3[] {vertexB, vertexC, vertexD});
+                this.surfaceTool.AddTriangleFan(new Vector3[] {vertexC, vertexB, vertexD});
             }
         }
     }
