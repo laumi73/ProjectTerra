@@ -11,7 +11,7 @@ public class PlayerController : Spatial
     public Basis newRotation;
 
     public Transform defaultPosition = new Transform() {
-            origin = new Vector3(0f, 30f, 0f),
+            origin = new Vector3(10f, 90f, 50f),
             basis = new Basis(Vector3.Left, Mathf.Deg2Rad(45f))
         };
 
