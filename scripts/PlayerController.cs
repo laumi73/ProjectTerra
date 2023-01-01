@@ -5,7 +5,7 @@ public class PlayerController : Spatial
 {
     public float movementSpeed = 0.5f;
     public float movementTime = 5f;
-    public float rotationAmount = 0.1f;
+    public float rotationAmount = 0.05f;
 
     public Vector3 newPosition;
     public Basis newRotation;
@@ -66,12 +66,13 @@ public class PlayerController : Spatial
         }
 
         Translation = Translation.LinearInterpolate(newPosition, delta * this.movementTime);
-        Transform = new Transform
+        Transform orthonormalizedTransform = this.Transform.Orthonormalized();
+
+        this.Transform = new Transform
         {
-            origin = Transform.origin,
-            basis = new Basis(Transform.basis.Quat().Slerp(newRotation.Quat(), delta))
+            origin = orthonormalizedTransform.origin,
+            basis = new Basis(orthonormalizedTransform.basis.Quat().Slerp(newRotation.Orthonormalized().Quat(), delta * 4))
         };
         Transform = Transform.Orthonormalized();
-        newRotation = newRotation.Orthonormalized();
     }
 }
