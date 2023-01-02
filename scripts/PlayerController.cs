@@ -18,7 +18,7 @@ public class PlayerController : Spatial
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        Transform = defaultPosition;
+        this.Transform = defaultPosition;
         this.newPosition = Translation;
         this.newRotation = Transform.basis;
     }
@@ -42,19 +42,19 @@ public class PlayerController : Spatial
         }
         if (Input.IsActionPressed("player_move_forward"))
         {
-            this.newPosition += (Vector3.Forward * this.movementSpeed);
+            this.newPosition -= ((Transform.basis.z * new Vector3(1f, 0f, 1f)).Normalized() * this.movementSpeed);
         }
         if (Input.IsActionPressed("player_move_backward"))
         {
-            this.newPosition -= (Vector3.Forward * this.movementSpeed);
+            this.newPosition += ((Transform.basis.z * new Vector3(1f, 0f, 1f)).Normalized() * this.movementSpeed);
         }
         if (Input.IsActionPressed("player_move_left"))
         {
-            this.newPosition += (Vector3.Left * this.movementSpeed);
+            this.newPosition -= (Transform.basis.x * this.movementSpeed);
         }
         if (Input.IsActionPressed("player_move_right"))
         {
-            this.newPosition -= (Vector3.Left * this.movementSpeed);
+            this.newPosition += (Transform.basis.x * this.movementSpeed);
         }
         if (Input.IsActionPressed("player_rotate_left"))
         {
