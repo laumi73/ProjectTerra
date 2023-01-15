@@ -29,6 +29,7 @@ public class PlayerController : Spatial
         this.Transform = defaultPosition;
         this.newPosition = this.Translation;
         this.newRotation = this.Transform.basis;
+        this.ProcessPriority = Int32.MinValue; //Ensures that camera changes is done last
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
