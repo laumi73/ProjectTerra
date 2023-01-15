@@ -15,7 +15,7 @@ public class PlayerController : Spatial
     // Node
     private Camera playerCamera; // Camera node attached to PlayerController
 
-
+    // Fields
     private Vector3 newPosition;
     private Basis newRotation;
     private Vector3 newZoom;
