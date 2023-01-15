@@ -5,37 +5,60 @@ public class PlayerController : Spatial
 {
     // Parameters
     private float movementSpeed = 0.5f;
-    private float movementTime = 5f;
+    private float movementTime = 4f;
     private float rotationAmount = 0.02f;
-    private float rotationSpeed = 3f;
-    private Vector3 zoomAmount;
+    private float rotationTime = 4f;
+    private float zoomAmount = 5f;
+    private float maxZoomAmount = 100f;
+    private float zoomTime = 1f;
 
-    // Objects
-    private Transform cameraTransform;
+    // Node
+    private Camera playerCamera; // Camera node attached to PlayerController
 
 
     private Vector3 newPosition;
     private Basis newRotation;
     private Vector3 newZoom;
 
-    public Transform defaultPosition = new Transform() {
-            origin = new Vector3(10f, 90f, 50f),
-            basis = new Basis(Vector3.Left, Mathf.Deg2Rad(45f))
-        };
+    private Transform defaultControllerPosition = new Transform()
+    {
+        origin = new Vector3(10f, 90f, 50f),
+        basis = new Basis(Vector3.Left, Mathf.Deg2Rad(45f))
+    };
+
+     private Transform defaultCameraTransform = new Transform()
+    {
+        origin = new Vector3(0f, 0f, 15f),
+        basis = new Basis(Vector3.Left, 0f)
+    };
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        this.Transform = defaultPosition;
+        // Get other nodes
+        this.playerCamera = this.GetNode<Camera>("PlayerCamera");
+
+        // Set initial values
+        this.ProcessPriority = Int32.MinValue; // Ensures that camera changes is done last
+        
+        this.Transform = this.defaultControllerPosition;
+        this.playerCamera.Transform = this.defaultCameraTransform;
+        
         this.newPosition = this.Translation;
         this.newRotation = this.Transform.basis;
-        this.ProcessPriority = Int32.MinValue; //Ensures that camera changes is done last
+        this.newZoom = this.playerCamera.Translation;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
         this.handleInput(delta);
+    }
+
+    public override void _PhysicsProcess(float delta)
+    {
+        base._PhysicsProcess(delta);
+        GD.Print("Player position: " + this.Transform.origin + "; Camera position: " +this.playerCamera.Transform.origin);
     }
 
     // Modify transform upon buttonpress/mouseclick
@@ -51,19 +74,19 @@ public class PlayerController : Spatial
         }
         if (Input.IsActionPressed("player_move_forward"))
         {
-            this.newPosition -= ((Transform.basis.z * new Vector3(1f, 0f, 1f)).Normalized() * this.movementSpeed);
+            this.newPosition -= ((this.Transform.basis.z * new Vector3(1f, 0f, 1f)).Normalized() * this.movementSpeed);
         }
         if (Input.IsActionPressed("player_move_backward"))
         {
-            this.newPosition += ((Transform.basis.z * new Vector3(1f, 0f, 1f)).Normalized() * this.movementSpeed);
+            this.newPosition += ((this.Transform.basis.z * new Vector3(1f, 0f, 1f)).Normalized() * this.movementSpeed);
         }
         if (Input.IsActionPressed("player_move_left"))
         {
-            this.newPosition -= (Transform.basis.x * this.movementSpeed);
+            this.newPosition -= (this.Transform.basis.x * this.movementSpeed);
         }
         if (Input.IsActionPressed("player_move_right"))
         {
-            this.newPosition += (Transform.basis.x * this.movementSpeed);
+            this.newPosition += (this.Transform.basis.x * this.movementSpeed);
         }
         if (Input.IsActionPressed("player_rotate_left"))
         {
@@ -73,14 +96,29 @@ public class PlayerController : Spatial
         {
             this.newRotation = this.newRotation.Rotated(Vector3.Up, -rotationAmount);
         }
+        if (Input.IsActionPressed("player_zoom_in"))
+        {
+            this.newZoom -= (new Vector3(0f, 0f, this.zoomAmount));
+            if (this.newZoom.z < 0) {
+                this.newZoom = Vector3.Zero;
+            }
+        }
+        if (Input.IsActionPressed("player_zoom_out"))
+        {
+            this.newZoom += (new Vector3(0f, 0f, this.zoomAmount));
+            if (this.newZoom.z > this.maxZoomAmount) {
+                this.newZoom = new Vector3(0f, 0f, this.maxZoomAmount);
+            }
+        }
 
-        Translation = Translation.LinearInterpolate(newPosition, delta * this.movementTime);
+        this.playerCamera.Translation = this.playerCamera.Translation.LinearInterpolate(this.newZoom, delta * zoomTime);
+        this.Translation = this.Translation.LinearInterpolate(newPosition, delta * this.movementTime);
         Transform orthonormalizedTransform = this.Transform.Orthonormalized();
 
         this.Transform = new Transform
         {
             origin = orthonormalizedTransform.origin,
-            basis = new Basis(orthonormalizedTransform.basis.Quat().Slerp(newRotation.Orthonormalized().Quat(), delta * rotationSpeed))
+            basis = new Basis(orthonormalizedTransform.basis.Quat().Slerp(this.newRotation.Orthonormalized().Quat(), delta * this.rotationTime))
         };
     }
 }
