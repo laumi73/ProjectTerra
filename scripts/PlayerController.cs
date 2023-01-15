@@ -58,7 +58,6 @@ public class PlayerController : Spatial
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
-        GD.Print("Player position: " + this.Transform.origin + "; Camera position: " +this.playerCamera.Transform.origin);
     }
 
     // Modify transform upon buttonpress/mouseclick
