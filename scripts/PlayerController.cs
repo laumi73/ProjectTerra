@@ -1,6 +1,8 @@
 using Godot;
 using System;
 
+//TODO: set default position to the first block from the sky at origin, add a bit of minimum height OR last saved positions
+//TODO: make movement speed dependent on zoom amount
 public class PlayerController : Spatial
 {
     // Parameters
@@ -26,7 +28,7 @@ public class PlayerController : Spatial
         basis = new Basis(Vector3.Left, Mathf.Deg2Rad(45f))
     };
 
-     private Transform defaultCameraTransform = new Transform()
+    private Transform defaultCameraTransform = new Transform()
     {
         origin = new Vector3(0f, 0f, 15f),
         basis = new Basis(Vector3.Left, 0f)
@@ -40,10 +42,10 @@ public class PlayerController : Spatial
 
         // Set initial values
         this.ProcessPriority = Int32.MinValue; // Ensures that camera changes is done last
-        
+
         this.Transform = this.defaultControllerPosition;
         this.playerCamera.Transform = this.defaultCameraTransform;
-        
+
         this.newPosition = this.Translation;
         this.newRotation = this.Transform.basis;
         this.newZoom = this.playerCamera.Translation;
@@ -58,6 +60,22 @@ public class PlayerController : Spatial
     public override void _PhysicsProcess(float delta)
     {
         base._PhysicsProcess(delta);
+    }
+
+    public override void _Input(InputEvent inputEvent)
+    {
+        if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
+        {
+            switch ((ButtonList)mouseEvent.ButtonIndex)
+            {
+                case ButtonList.Left:
+                    GD.Print("Left button was clicked at " + mouseEvent.Position);
+                    break;
+                case ButtonList.WheelUp:
+                    GD.Print("Wheel up");
+                    break;
+            }
+        }
     }
 
     // Modify transform upon keyboard press 
@@ -98,14 +116,16 @@ public class PlayerController : Spatial
         if (Input.IsActionPressed("player_zoom_in")) // Zoom in
         {
             this.newZoom -= (new Vector3(0f, 0f, this.zoomAmount));
-            if (this.newZoom.z < 0) {
+            if (this.newZoom.z < 0)
+            {
                 this.newZoom = Vector3.Zero;
             }
         }
         if (Input.IsActionPressed("player_zoom_out")) // Zoom out
         {
             this.newZoom += (new Vector3(0f, 0f, this.zoomAmount));
-            if (this.newZoom.z > this.maxZoomAmount) {
+            if (this.newZoom.z > this.maxZoomAmount)
+            {
                 this.newZoom = new Vector3(0f, 0f, this.maxZoomAmount);
             }
         }
