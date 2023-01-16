@@ -3,6 +3,7 @@ using System;
 
 //TODO: set default position to the first block from the sky at origin, add a bit of minimum height OR last saved positions
 //TODO: make movement speed dependent on zoom amount
+//TODO: add some sort of indicator of where the playerController is centered at when moving
 public class PlayerController : Spatial
 {
     // Parameters
@@ -55,6 +56,7 @@ public class PlayerController : Spatial
     public override void _Process(float delta)
     {
         this.handleInput(delta);
+        this.handleMouseInput(delta);
     }
 
     public override void _PhysicsProcess(float delta)
@@ -62,18 +64,20 @@ public class PlayerController : Spatial
         base._PhysicsProcess(delta);
     }
 
-    public override void _Input(InputEvent inputEvent)
-    {
-        if (inputEvent is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
-        {
-            switch ((ButtonList)mouseEvent.ButtonIndex)
+    // Modify newPosition and newRotation upon mouse input
+    private void handleMouseInput(float delta) {
+        if (Input.IsActionJustReleased("player_mouse_zoom_in")) { // Zoom in
+            this.newZoom -= (new Vector3(0f, 0f, this.zoomAmount));
+            if (this.newZoom.z < 0)
             {
-                case ButtonList.Left:
-                    GD.Print("Left button was clicked at " + mouseEvent.Position);
-                    break;
-                case ButtonList.WheelUp:
-                    GD.Print("Wheel up");
-                    break;
+                this.newZoom = Vector3.Zero;
+            }
+        }
+        if (Input.IsActionJustReleased("player_mouse_zoom_out")) { // Zoom out
+            this.newZoom += (new Vector3(0f, 0f, this.zoomAmount));
+            if (this.newZoom.z > this.maxZoomAmount)
+            {
+                this.newZoom = new Vector3(0f, 0f, this.maxZoomAmount);
             }
         }
     }
