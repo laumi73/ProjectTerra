@@ -10,6 +10,7 @@ public class PlayerController : Spatial
     private float movementSpeed = 0.5f;
     private float movementTime = 4f;
     private float rotationAmount = 0.02f;
+    private float mouseRotationAmount = 0.005f;
     private float rotationTime = 4f;
     private float zoomAmount = 5f;
     private float maxZoomAmount = 100f;
@@ -25,7 +26,7 @@ public class PlayerController : Spatial
     private Vector3 newZoom;
 
     private Vector2 initialCursorPosition;
-    private Vector2 relativeCursorDistance;
+    private Vector2 newCursorLocation;
 
     private Transform defaultControllerPosition = new Transform()
     {
@@ -94,8 +95,17 @@ public class PlayerController : Spatial
         }
         if (Input.IsActionPressed("player_mouse_rotate"))
         {
-            this.relativeCursorDistance = (this.initialCursorPosition - this.GetViewport().GetMousePosition()) / this.GetViewport().Size;
-            this.newRotation = this.newRotation.Rotated(this.Transform.basis.Column0, this.relativeCursorDistance.y * this.maxYRotation);
+            this.newCursorLocation = this.GetViewport().GetMousePosition();
+            float currentYAngle = this.newRotation.GetEuler().x;
+            float rotationValue = (this.initialCursorPosition - this.newCursorLocation).y * this.mouseRotationAmount;
+            if (rotationValue > 0 && ((currentYAngle + rotationAmount) < this.maxYRotation)) {
+                this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
+                this.initialCursorPosition = this.newCursorLocation;
+            }
+            else if (rotationValue < 0 && (currentYAngle - rotationAmount > -this.maxYRotation)) {
+                this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
+                this.initialCursorPosition = this.newCursorLocation;
+            }
         }
     }
 
