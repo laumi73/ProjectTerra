@@ -15,7 +15,7 @@ public class PlayerController : Spatial
     private float zoomAmount = 5f;
     private float maxZoomAmount = 100f;
     private float zoomTime = 1f;
-    private float maxYRotation = Mathf.Deg2Rad(88f);
+    private float maxYRotation = Mathf.Deg2Rad(85f);
 
     // Node
     private Camera playerCamera; // Camera node attached to PlayerController
@@ -100,10 +100,12 @@ public class PlayerController : Spatial
             float rotationValue = (this.initialCursorPosition - this.newCursorLocation).y * this.mouseRotationAmount;
             if (rotationValue > 0 && ((currentYAngle + rotationAmount) < this.maxYRotation)) {
                 this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
+                this.newRotation = this.newRotation.Rotated(Vector3.Up, (this.initialCursorPosition - this.newCursorLocation).x * this.mouseRotationAmount);
                 this.initialCursorPosition = this.newCursorLocation;
             }
             else if (rotationValue < 0 && (currentYAngle - rotationAmount > -this.maxYRotation)) {
                 this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
+                this.newRotation = this.newRotation.Rotated(Vector3.Up, (this.initialCursorPosition - this.newCursorLocation).x * this.mouseRotationAmount);
                 this.initialCursorPosition = this.newCursorLocation;
             }
         }
