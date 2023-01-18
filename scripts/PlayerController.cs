@@ -14,6 +14,7 @@ public class PlayerController : Spatial
     private float zoomAmount = 5f;
     private float maxZoomAmount = 100f;
     private float zoomTime = 1f;
+    private float maxYRotation = Mathf.Deg2Rad(88f);
 
     // Node
     private Camera playerCamera; // Camera node attached to PlayerController
@@ -22,6 +23,9 @@ public class PlayerController : Spatial
     private Vector3 newPosition;
     private Basis newRotation;
     private Vector3 newZoom;
+
+    private Vector2 initialCursorPosition;
+    private Vector2 relativeCursorDistance;
 
     private Transform defaultControllerPosition = new Transform()
     {
@@ -65,20 +69,33 @@ public class PlayerController : Spatial
     }
 
     // Modify newPosition and newRotation upon mouse input
-    private void handleMouseInput(float delta) {
-        if (Input.IsActionJustReleased("player_mouse_zoom_in")) { // Zoom in
+    private void handleMouseInput(float delta)
+    {
+        if (Input.IsActionJustReleased("player_mouse_zoom_in"))
+        { // Zoom in
             this.newZoom -= (new Vector3(0f, 0f, this.zoomAmount));
             if (this.newZoom.z < 0)
             {
                 this.newZoom = Vector3.Zero;
             }
         }
-        if (Input.IsActionJustReleased("player_mouse_zoom_out")) { // Zoom out
+        if (Input.IsActionJustReleased("player_mouse_zoom_out"))
+        { // Zoom out
             this.newZoom += (new Vector3(0f, 0f, this.zoomAmount));
             if (this.newZoom.z > this.maxZoomAmount)
             {
                 this.newZoom = new Vector3(0f, 0f, this.maxZoomAmount);
             }
+        }
+        if (Input.IsActionJustPressed("player_mouse_rotate"))
+        {
+            GD.Print(this.Transform.basis.GetEuler());
+            this.initialCursorPosition = this.GetViewport().GetMousePosition();
+        }
+        if (Input.IsActionPressed("player_mouse_rotate"))
+        {
+            this.relativeCursorDistance = (this.initialCursorPosition - this.GetViewport().GetMousePosition()) / this.GetViewport().Size;
+            this.newRotation = this.newRotation.Rotated(this.Transform.basis.Column0, this.relativeCursorDistance.y * this.maxYRotation);
         }
     }
 
@@ -109,13 +126,25 @@ public class PlayerController : Spatial
         {
             this.newPosition += (this.Transform.basis.x * this.movementSpeed);
         }
+         if (Input.IsActionPressed("player_rotate_up")) // Rotate up
+        {
+            if (!((this.newRotation.GetEuler().x + this.rotationAmount) > this.maxYRotation)) {
+                this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, this.rotationAmount);
+            }
+        }
+        if (Input.IsActionPressed("player_rotate_down")) // Rotate down
+        {
+            if (!((this.newRotation.GetEuler().x - this.rotationAmount) < -this.maxYRotation)) {
+                this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, -this.rotationAmount);
+            }
+        }
         if (Input.IsActionPressed("player_rotate_left")) // Rotate left
         {
-            this.newRotation = this.newRotation.Rotated(Vector3.Up, rotationAmount);
+            this.newRotation = this.newRotation.Rotated(Vector3.Up, this.rotationAmount);
         }
         if (Input.IsActionPressed("player_rotate_right")) // Rotate right
         {
-            this.newRotation = this.newRotation.Rotated(Vector3.Up, -rotationAmount);
+            this.newRotation = this.newRotation.Rotated(Vector3.Up, -this.rotationAmount);
         }
         if (Input.IsActionPressed("player_zoom_in")) // Zoom in
         {
