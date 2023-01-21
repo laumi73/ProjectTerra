@@ -14,7 +14,7 @@ public static class VoxelData {
 
     public static readonly int[,] voxelTriangles = new int[6, 4] {
         {6, 7, 2, 3}, //Top
-        {7, 6, 4, 5}, //Bottom
+        {4, 5, 0, 1}, //Bottom
         {3, 7, 0, 4}, //Left
         {6, 2, 5, 1}, //Right
         {7, 6, 4, 5}, //Front
