@@ -10,7 +10,7 @@ public class PlayerController : Spatial
     private float movementSpeed = 0.5f;
     private float movementTime = 4f;
     private float rotationAmount = 0.02f;
-    private float mouseRotationAmount = 0.005f;
+    private float mouseRotationAmount = 0.003f;
     private float rotationTime = 4f;
     private float zoomAmount = 5f;
     private float maxZoomAmount = 100f;
