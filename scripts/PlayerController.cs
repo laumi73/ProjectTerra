@@ -4,6 +4,10 @@ using System;
 //TODO: set default position to the first block from the sky at origin, add a bit of minimum height OR last saved positions
 //TODO: make movement speed dependent on zoom amount
 //TODO: add some sort of indicator of where the playerController is centered at when moving
+//TODO: switch to using quaternion
+//TODO: make camera rotate 180 degree on default; currently it's facing -z direction
+//TODO: add more comments to clarify rotation steps
+
 public class PlayerController : Spatial
 {
     // Parameters
@@ -31,7 +35,7 @@ public class PlayerController : Spatial
     private Transform defaultControllerPosition = new Transform()
     {
         origin = new Vector3(10f, 90f, 50f),
-        basis = new Basis(Vector3.Left, Mathf.Deg2Rad(45f))
+        basis = new Basis(Vector3.Left, 0f)
     };
 
     private Transform defaultCameraTransform = new Transform()
@@ -90,7 +94,6 @@ public class PlayerController : Spatial
         }
         if (Input.IsActionJustPressed("player_mouse_rotate"))
         {
-            GD.Print(this.Transform.basis.GetEuler());
             this.initialCursorPosition = this.GetViewport().GetMousePosition();
         }
         if (Input.IsActionPressed("player_mouse_rotate"))

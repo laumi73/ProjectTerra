@@ -1,6 +1,7 @@
 using Godot;
 
-public static class VoxelData {
+public static class VoxelData
+{
     public static readonly Vector3[] voxelVertices = new Vector3[8] {
         new Vector3(0f, 0f, 0f), //0
         new Vector3(1f, 0f, 0f), //1
@@ -13,11 +14,18 @@ public static class VoxelData {
     };
 
     public static readonly int[,] voxelTriangles = new int[6, 4] {
-        {6, 7, 2, 3}, //Top
-        {4, 5, 0, 1}, //Bottom
-        {3, 7, 0, 4}, //Left
-        {6, 2, 5, 1}, //Right
-        {7, 6, 4, 5}, //Front
-        {2, 3, 1, 0}  //Back
+        {3, 2, 7, 6}, //Top
+        {1, 0, 5, 4}, //Bottom
+        {4, 0, 7, 3}, //Left
+        {1, 5, 2, 6}, //Right
+        {5, 4, 6, 7}, //Front
+        {0, 1, 3, 2}  //Back
+    };
+
+    public static readonly Vector2[] voxelUVs = new Vector2[4] {
+        new Vector2(0f, 1f),
+        new Vector2(1f, 1f),
+        new Vector2(1f, 0f),
+        new Vector2(0f, 0f)
     };
 }
