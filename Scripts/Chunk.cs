@@ -3,16 +3,29 @@ using System;
 
 public class Chunk : StaticBody
 {
-    private SurfaceTool surfaceTool = new SurfaceTool();
-    private ArrayMesh mesh = null;
-    private MeshInstance meshInstance = null;
+    // Mesh fields
+    private SurfaceTool surfaceTool;
+    private ArrayMesh mesh;
+    private MeshInstance meshInstance;
     private SpatialMaterial testMaterial;
+
+    // Chunk fields
+    bool [,,,] voxelMap;
+
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        // Variable initializations
+        // Mesh related variables
+        this.surfaceTool = new SurfaceTool();
+        this.mesh = null;
+        this.meshInstance = null;
         this.testMaterial = new SpatialMaterial();
         this.testMaterial.AlbedoTexture = GD.Load<Texture>("res://resources/textures/blocks/ReferenceTexture.png");
+
+        // Chunk related variables
+
         this.updateMesh();
     }
 
@@ -50,11 +63,11 @@ public class Chunk : StaticBody
         //Loop through each block position inside a chunk and draw the blocks
         void drawBlocks()
         {
-            for (int x = 0; x < ChunkData.DIMENSION.x; x++)
+            for (int y = 0; y < ChunkData.ChunkHeight; y++)
             {
-                for (int y = 0; y < ChunkData.DIMENSION.y; y++)
+                for (int x = 0; x < ChunkData.ChunkWidth; x++)
                 {
-                    for (int z = 0; z < ChunkData.DIMENSION.z; z++)
+                    for (int z = 0; z < ChunkData.ChunkWidth; z++)
                     {
                         drawBlockFaces(new Vector3(x, y, z));
                     }
