@@ -13,13 +13,32 @@ public static class VoxelData
         new Vector3(0f, 1f, 1f)  //7
     };
 
+    public enum faceDirection
+    {
+        Top = 0,
+        Bottom = 1,
+        Left = 2,
+        Right = 3,
+        Front = 4,
+        Back = 5
+    }
+
+    public static readonly Vector3[] faceChecks = new Vector3[6] {
+        new Vector3(0f, 0f, 1.0f), // Top
+        new Vector3(0f, 0f, -1f), // Bottom
+        new Vector3(-1f, 0f, 0f), // Left
+        new Vector3(1f, 0f, 0f), // Right
+        new Vector3(0f, 0f, -1f), // Front
+        new Vector3(0f, 0f, 1f) // Back
+    };
+
     public static readonly int[,] voxelTriangles = new int[6, 4] {
-        {3, 2, 7, 6}, //Top
-        {1, 0, 5, 4}, //Bottom
-        {4, 0, 7, 3}, //Left
-        {1, 5, 2, 6}, //Right
-        {5, 4, 6, 7}, //Front
-        {0, 1, 3, 2}  //Back
+        {3, 2, 7, 6}, // Top
+        {1, 0, 5, 4}, // Bottom
+        {4, 0, 7, 3}, // Left
+        {1, 5, 2, 6}, // Right
+        {5, 4, 6, 7}, // Front
+        {0, 1, 3, 2}  // Back
     };
 
     public static readonly Vector2[] voxelUVs = new Vector2[4] {
