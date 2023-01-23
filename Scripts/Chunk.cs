@@ -10,7 +10,7 @@ public class Chunk : StaticBody
     private SpatialMaterial testMaterial;
 
     // Chunk fields
-    bool [,,,] voxelMap;
+    bool [,,] blockMap;
 
 
     // Called when the node enters the scene tree for the first time.
@@ -25,7 +25,9 @@ public class Chunk : StaticBody
         this.testMaterial.AlbedoTexture = GD.Load<Texture>("res://resources/textures/blocks/ReferenceTexture.png");
 
         // Chunk related variables
+        this.blockMap = new bool[ChunkData.ChunkWidth, ChunkData.ChunkHeight, ChunkData.ChunkWidth];
 
+        // Functions
         this.updateMesh();
     }
 
@@ -50,7 +52,7 @@ public class Chunk : StaticBody
 
         //Draw all of the blocks inside a chunk
         this.surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
-        drawBlocks();
+        addBlocks();
 
         this.surfaceTool.GenerateNormals(false);
         this.surfaceTool.SetMaterial(this.testMaterial);
@@ -61,7 +63,7 @@ public class Chunk : StaticBody
         this.meshInstance.CreateTrimeshCollision();
 
         //Loop through each block position inside a chunk and draw the blocks
-        void drawBlocks()
+        void addBlocks()
         {
             for (int y = 0; y < ChunkData.ChunkHeight; y++)
             {
@@ -78,14 +80,14 @@ public class Chunk : StaticBody
         //Draw the 6 faces of a block
         void drawBlockFaces(Vector3 offset)
         {
-            Vector2[] uv1 = new Vector2[]{VoxelData.voxelUVs[0], VoxelData.voxelUVs[1], VoxelData.voxelUVs[3]};
-            Vector2[] uv2 = new Vector2[]{VoxelData.voxelUVs[3], VoxelData.voxelUVs[1], VoxelData.voxelUVs[2]};
+            Vector2[] uv1 = new Vector2[]{BlockData.blockUVs[0], BlockData.blockUVs[1], BlockData.blockUVs[3]};
+            Vector2[] uv2 = new Vector2[]{BlockData.blockUVs[3], BlockData.blockUVs[1], BlockData.blockUVs[2]};
             for (int i = 0; i < 6; i++)
             {
-                Vector3 vertexA = VoxelData.voxelVertices[VoxelData.voxelTriangles[i, 0]] + offset;
-                Vector3 vertexB = VoxelData.voxelVertices[VoxelData.voxelTriangles[i, 1]] + offset;
-                Vector3 vertexC = VoxelData.voxelVertices[VoxelData.voxelTriangles[i, 2]] + offset;
-                Vector3 vertexD = VoxelData.voxelVertices[VoxelData.voxelTriangles[i, 3]] + offset;
+                Vector3 vertexA = BlockData.blockVertices[BlockData.blockTriangles[i, 0]] + offset;
+                Vector3 vertexB = BlockData.blockVertices[BlockData.blockTriangles[i, 1]] + offset;
+                Vector3 vertexC = BlockData.blockVertices[BlockData.blockTriangles[i, 2]] + offset;
+                Vector3 vertexD = BlockData.blockVertices[BlockData.blockTriangles[i, 3]] + offset;
 
                 this.surfaceTool.AddTriangleFan(new Vector3[] {vertexA, vertexB, vertexC}, uv1);
                 this.surfaceTool.AddTriangleFan(new Vector3[] {vertexC, vertexB, vertexD}, uv2);

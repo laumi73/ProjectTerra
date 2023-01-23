@@ -1,8 +1,8 @@
 using Godot;
 
-public static class VoxelData
+public static class BlockData
 {
-    public static readonly Vector3[] voxelVertices = new Vector3[8] {
+    public static readonly Vector3[] blockVertices = new Vector3[8] {
         new Vector3(0f, 0f, 0f), //0
         new Vector3(1f, 0f, 0f), //1
         new Vector3(1f, 1f, 0f), //2
@@ -32,7 +32,7 @@ public static class VoxelData
         new Vector3(0f, 0f, 1f) // Back
     };
 
-    public static readonly int[,] voxelTriangles = new int[6, 4] {
+    public static readonly int[,] blockTriangles = new int[6, 4] {
         {3, 2, 7, 6}, // Top
         {1, 0, 5, 4}, // Bottom
         {4, 0, 7, 3}, // Left
@@ -41,7 +41,8 @@ public static class VoxelData
         {0, 1, 3, 2}  // Back
     };
 
-    public static readonly Vector2[] voxelUVs = new Vector2[4] {
+    // Note: Godot does it like MS Paint - origin is at top left corner
+    public static readonly Vector2[] blockUVs = new Vector2[4] {
         new Vector2(0f, 1f),
         new Vector2(1f, 1f),
         new Vector2(1f, 0f),
