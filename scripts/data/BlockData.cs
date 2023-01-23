@@ -23,13 +23,13 @@ public static class BlockData
         Back = 5
     }
 
-    public static readonly Vector3[] faceChecks = new Vector3[6] {
-        new Vector3(0f, 0f, 1.0f), // Top
-        new Vector3(0f, 0f, -1f), // Bottom
+    public static readonly Vector3[] faceOffset = new Vector3[6] {
+        new Vector3(0f, 1f, 0f), // Top
+        new Vector3(0f, -1f, 0f), // Bottom
         new Vector3(-1f, 0f, 0f), // Left
         new Vector3(1f, 0f, 0f), // Right
-        new Vector3(0f, 0f, -1f), // Front
-        new Vector3(0f, 0f, 1f) // Back
+        new Vector3(0f, 0f, 1f), // Front
+        new Vector3(0f, 0f, -1f) // Back
     };
 
     public static readonly int[,] blockTriangles = new int[6, 4] {

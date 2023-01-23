@@ -101,12 +101,14 @@ public class PlayerController : Spatial
             this.newCursorLocation = this.GetViewport().GetMousePosition();
             float currentYAngle = this.newRotation.GetEuler().x;
             float rotationValue = (this.initialCursorPosition - this.newCursorLocation).y * this.mouseRotationAmount;
-            if (rotationValue > 0 && ((currentYAngle + rotationAmount) < this.maxYRotation)) {
+            if (rotationValue > 0 && ((currentYAngle + rotationAmount) < this.maxYRotation))
+            {
                 this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
                 this.newRotation = this.newRotation.Rotated(Vector3.Up, (this.initialCursorPosition - this.newCursorLocation).x * this.mouseRotationAmount);
                 this.initialCursorPosition = this.newCursorLocation;
             }
-            else if (rotationValue < 0 && (currentYAngle - rotationAmount > -this.maxYRotation)) {
+            else if (rotationValue < 0 && (currentYAngle - rotationAmount > -this.maxYRotation))
+            {
                 this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
                 this.newRotation = this.newRotation.Rotated(Vector3.Up, (this.initialCursorPosition - this.newCursorLocation).x * this.mouseRotationAmount);
                 this.initialCursorPosition = this.newCursorLocation;
@@ -141,15 +143,17 @@ public class PlayerController : Spatial
         {
             this.newPosition += (this.Transform.basis.x * this.movementSpeed);
         }
-         if (Input.IsActionPressed("player_rotate_up")) // Rotate up
+        if (Input.IsActionPressed("player_rotate_up")) // Rotate up
         {
-            if (!((this.newRotation.GetEuler().x + this.rotationAmount) > this.maxYRotation)) {
+            if (!((this.newRotation.GetEuler().x + this.rotationAmount) > this.maxYRotation))
+            {
                 this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, this.rotationAmount);
             }
         }
         if (Input.IsActionPressed("player_rotate_down")) // Rotate down
         {
-            if (!((this.newRotation.GetEuler().x - this.rotationAmount) < -this.maxYRotation)) {
+            if (!((this.newRotation.GetEuler().x - this.rotationAmount) < -this.maxYRotation))
+            {
                 this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, -this.rotationAmount);
             }
         }
