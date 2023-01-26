@@ -2,6 +2,7 @@ using Godot;
 
 public static class BlockData
 {
+    // Position of each of the 8 vertices of a block
     public static readonly Vector3[] blockVertices = new Vector3[8] {
         new Vector3(0f, 0f, 0f), //0
         new Vector3(1f, 0f, 0f), //1
@@ -13,6 +14,7 @@ public static class BlockData
         new Vector3(0f, 1f, 1f)  //7
     };
 
+    // Enum for finding numerical order of a given face
     public enum faceDirection
     {
         Top = 0,
@@ -23,6 +25,7 @@ public static class BlockData
         Back = 5
     }
 
+    // Position offset of each face, for inspecting a block's neighboring blocks
     public static readonly Vector3[] faceOffset = new Vector3[6] {
         new Vector3(0f, 1f, 0f), // Top
         new Vector3(0f, -1f, 0f), // Bottom
@@ -31,7 +34,9 @@ public static class BlockData
         new Vector3(0f, 0f, 1f), // Front
         new Vector3(0f, 0f, -1f) // Back
     };
-
+    
+    // Counter clockwise ordered index of the two triangles of a face in each direction
+    // Note: Godot's backface culling is counterclockwise i.e. cull triagles with vertex indexes ordered in clockwise manner
     public static readonly int[,] blockTriangles = new int[6, 4] {
         {3, 2, 7, 6}, // Top
         {1, 0, 5, 4}, // Bottom
@@ -41,6 +46,7 @@ public static class BlockData
         {0, 1, 3, 2}  // Back
     };
 
+    // UV vertices ordering of a face
     // Note: Godot does it like MS Paint - origin is at top left corner
     public static readonly Vector2[] blockUVs = new Vector2[4] {
         new Vector2(0f, 1f),
