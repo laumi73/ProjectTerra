@@ -1,6 +1,6 @@
 using Godot;
 
-public static class BlockData
+public static class VoxelData
 {
     // Position of each of the 8 vertices of a block
     public static readonly Vector3[] blockVertices = new Vector3[8] {

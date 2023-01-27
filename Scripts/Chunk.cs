@@ -53,7 +53,6 @@ public class Chunk : StaticBody
         //Draw all of the blocks inside a chunk
         this.surfaceTool.Begin(Mesh.PrimitiveType.Triangles);
         addBlocks();
-        GD.Print(getBlockDataByPosition(new Vector3(5, 5, 5)));
         drawBlocks();
 
         this.surfaceTool.GenerateNormals(false);
@@ -100,16 +99,16 @@ public class Chunk : StaticBody
         //Draw the 6 faces of a block
         void drawBlockFaces(Vector3 blockPosition)
         {
-            Vector2[] uv1 = new Vector2[] { BlockData.blockUVs[0], BlockData.blockUVs[1], BlockData.blockUVs[3] };
-            Vector2[] uv2 = new Vector2[] { BlockData.blockUVs[3], BlockData.blockUVs[1], BlockData.blockUVs[2] };
+            Vector2[] uv1 = new Vector2[] { VoxelData.blockUVs[0], VoxelData.blockUVs[1], VoxelData.blockUVs[3] };
+            Vector2[] uv2 = new Vector2[] { VoxelData.blockUVs[3], VoxelData.blockUVs[1], VoxelData.blockUVs[2] };
             for (int i = 0; i < 6; i++)
             {
-                if (!this.getBlockDataByPosition(blockPosition + BlockData.faceOffset[i]))
+                if (!this.getBlockDataByPosition(blockPosition + VoxelData.faceOffset[i]))
                 {
-                    Vector3 vertexA = BlockData.blockVertices[BlockData.blockTriangles[i, 0]] + blockPosition;
-                    Vector3 vertexB = BlockData.blockVertices[BlockData.blockTriangles[i, 1]] + blockPosition;
-                    Vector3 vertexC = BlockData.blockVertices[BlockData.blockTriangles[i, 2]] + blockPosition;
-                    Vector3 vertexD = BlockData.blockVertices[BlockData.blockTriangles[i, 3]] + blockPosition;
+                    Vector3 vertexA = VoxelData.blockVertices[VoxelData.blockTriangles[i, 0]] + blockPosition;
+                    Vector3 vertexB = VoxelData.blockVertices[VoxelData.blockTriangles[i, 1]] + blockPosition;
+                    Vector3 vertexC = VoxelData.blockVertices[VoxelData.blockTriangles[i, 2]] + blockPosition;
+                    Vector3 vertexD = VoxelData.blockVertices[VoxelData.blockTriangles[i, 3]] + blockPosition;
 
                     this.surfaceTool.AddTriangleFan(new Vector3[] { vertexA, vertexB, vertexC }, uv1);
                     this.surfaceTool.AddTriangleFan(new Vector3[] { vertexC, vertexB, vertexD }, uv2);
