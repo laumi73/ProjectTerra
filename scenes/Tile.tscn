@@ -3,7 +3,7 @@
 [ext_resource path="res://scripts/Chunk.cs" type="Script" id=1]
 [ext_resource path="res://scenes/PlayerController.tscn" type="PackedScene" id=2]
 
-[node name="Overworld" type="Node"]
+[node name="Tile" type="Node"]
 
 [node name="Chunk" type="StaticBody" parent="."]
 script = ExtResource( 1 )
