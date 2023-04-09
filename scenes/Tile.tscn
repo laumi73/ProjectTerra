@@ -8,4 +8,4 @@
 [node name="Chunk" type="StaticBody" parent="."]
 script = ExtResource( 1 )
 
-[node name="PlayerController" parent="." instance=ExtResource( 2 )]
+[node name="Player" parent="." instance=ExtResource( 2 )]

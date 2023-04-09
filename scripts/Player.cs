@@ -8,7 +8,7 @@ using System;
 //TODO: make camera rotate 180 degree on default; currently it's facing -z direction
 //TODO: add more comments to clarify rotation steps
 
-public class PlayerController : Spatial
+public class Player : Spatial
 {
     // Parameters
     private float movementSpeed = 0.5f;
