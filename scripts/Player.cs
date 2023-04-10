@@ -4,11 +4,8 @@ using System;
 //TODO: set default position to the first block from the sky at origin, add a bit of minimum height OR last saved positions
 //TODO: make movement speed dependent on zoom amount
 //TODO: add some sort of indicator of where the playerController is centered at when moving
-//TODO: switch to using quaternion
-//TODO: make camera rotate 180 degree on default; currently it's facing -z direction
-//TODO: add more comments to clarify rotation steps
-
-public class Player : Spatial
+//TODO: make rotation use quaternion to control rotation direction (to prevent rotating backward)
+public class PlayerController : Spatial
 {
     // Parameters
     private float movementSpeed = 0.5f;
@@ -35,7 +32,8 @@ public class Player : Spatial
     private Transform defaultControllerPosition = new Transform()
     {
         origin = new Vector3(10f, 90f, 50f),
-        basis = new Basis(Vector3.Left, 0f)
+        basis = new Basis(Vector3.Left, Mathf.Deg2Rad(45f))
+        //basis = new Basis(new Quat(10f, 0f, 0f, 1f)).Orthonormalized()
     };
 
     private Transform defaultCameraTransform = new Transform()
@@ -51,7 +49,8 @@ public class Player : Spatial
         this.playerCamera = this.GetNode<Camera>("PlayerCamera");
 
         // Set initial values
-        this.ProcessPriority = Int32.MinValue; // Ensures that camera changes is done last
+        // Ensures that camera changes is done last
+        this.ProcessPriority = Int32.MinValue;
 
         this.Transform = this.defaultControllerPosition;
         this.playerCamera.Transform = this.defaultCameraTransform;
@@ -66,6 +65,7 @@ public class Player : Spatial
     {
         this.handleInput(delta);
         this.handleMouseInput(delta);
+        this.interpolatePlayerController(delta);
     }
 
     public override void _PhysicsProcess(float delta)
@@ -103,14 +103,14 @@ public class Player : Spatial
             float rotationValue = (this.initialCursorPosition - this.newCursorLocation).y * this.mouseRotationAmount;
             if (rotationValue > 0 && ((currentYAngle + rotationAmount) < this.maxYRotation))
             {
-                this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
                 this.newRotation = this.newRotation.Rotated(Vector3.Up, (this.initialCursorPosition - this.newCursorLocation).x * this.mouseRotationAmount);
+                this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
                 this.initialCursorPosition = this.newCursorLocation;
             }
             else if (rotationValue < 0 && (currentYAngle - rotationAmount > -this.maxYRotation))
             {
-                this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
                 this.newRotation = this.newRotation.Rotated(Vector3.Up, (this.initialCursorPosition - this.newCursorLocation).x * this.mouseRotationAmount);
+                this.newRotation = this.newRotation.Rotated(this.newRotation.Column0, rotationValue);
                 this.initialCursorPosition = this.newCursorLocation;
             }
         }
@@ -180,17 +180,20 @@ public class Player : Spatial
             {
                 this.newZoom = new Vector3(0f, 0f, this.maxZoomAmount);
             }
-        }
+        }        
+    }
 
-        // Interpolations
+    private void interpolatePlayerController(float delta) {
+         // Move player/camera
         this.playerCamera.Translation = this.playerCamera.Translation.LinearInterpolate(this.newZoom, delta * zoomTime);
-        this.Translation = this.Translation.LinearInterpolate(newPosition, delta * this.movementTime);
-        Transform orthonormalizedTransform = this.Transform.Orthonormalized();
+        this.GlobalTranslation = this.GlobalTranslation.LinearInterpolate(newPosition, delta * this.movementTime);
 
+        // Rotate player/camera
         this.Transform = new Transform
         {
-            origin = orthonormalizedTransform.origin,
-            basis = new Basis(orthonormalizedTransform.basis.Quat().Slerp(this.newRotation.Orthonormalized().Quat(), delta * this.rotationTime))
+            origin = this.Transform.origin,
+            basis = new Basis(this.Transform.basis.Quat().Normalized()
+                .Slerp(this.newRotation.Quat().Normalized(), delta * this.rotationTime))
         };
     }
 }
