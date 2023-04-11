@@ -5,7 +5,7 @@ using System;
 //TODO: make movement speed dependent on zoom amount
 //TODO: add some sort of indicator of where the playerController is centered at when moving
 //TODO: make rotation use quaternion to control rotation direction (to prevent rotating backward)
-public class PlayerController : Spatial
+public class Player : Spatial
 {
     // Parameters
     private float movementSpeed = 0.5f;
@@ -186,7 +186,7 @@ public class PlayerController : Spatial
     private void interpolatePlayerController(float delta) {
          // Move player/camera
         this.playerCamera.Translation = this.playerCamera.Translation.LinearInterpolate(this.newZoom, delta * zoomTime);
-        this.GlobalTranslation = this.GlobalTranslation.LinearInterpolate(newPosition, delta * this.movementTime);
+        this.Translation = this.Translation.LinearInterpolate(newPosition, delta * this.movementTime);
 
         // Rotate player/camera
         this.Transform = new Transform
