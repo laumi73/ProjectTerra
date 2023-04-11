@@ -1,6 +1,7 @@
 using Godot;
+using System;
 
-public static class VoxelData
+public static class BlockData
 {
     // Position of each of the 8 vertices of a block
     public static readonly Vector3[] blockVertices = new Vector3[8] {
@@ -37,7 +38,7 @@ public static class VoxelData
     
     // Counter clockwise ordered index of the two triangles of a face in each direction
     // Note: Godot's backface culling is counterclockwise i.e. cull triagles with vertex indexes ordered in clockwise manner
-    public static readonly int[,] blockTriangles = new int[6, 4] {
+    public static readonly byte[,] blockTriangles = new byte[6, 4] {
         {3, 2, 7, 6}, // Top
         {1, 0, 5, 4}, // Bottom
         {4, 0, 7, 3}, // Left
