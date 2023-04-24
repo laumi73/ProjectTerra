@@ -100,7 +100,7 @@ player_mouse_zoom_out={
 
 [mono]
 
-project/assembly_name="VoxelTerrainProject"
+project/assembly_name="ProjectTerraProject"
 
 [physics]
 
